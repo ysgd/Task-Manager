@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css';
-import CustomModal from './components/Modal'
+import Modal from './components/Modal'
 
 const tasks = [
   {id: 1,
@@ -20,10 +20,39 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state= {
+      modal:false,
       viewCompleted:false,
+      taskList: tasks,
+      activeItem: {
+        title: "",
+        description: "",
+        completed: false
+      },
       taskList: tasks,
     };
   }
+
+  //toggle property
+  toggle = () => {
+    this.setState({modal: !this.state.modal });
+  };
+  handleSubmit = item => {
+    this.toggle();
+    alert("saved!" + JSON.stringify(item));
+  };
+  handleDelete = item => {
+    alert("deleted!" + JSON.stringify(item));
+  };
+
+  createItem = () => {
+    const item = {title: "", modal: !this.state.modal};
+    this.setState({activeItem: item, modal: !this.state.modal});
+  };
+
+  editItem = item => {
+    this.setState({activeItem: item, modal: !this.state.modal});
+  };
+
   displayCompleted = status => {
     if(status){
       return this.setState({viewCompleted:true});
@@ -75,9 +104,9 @@ class App extends Component {
   
   render(){
     return (
-      <main className="context">
-        <h1 className="text-black text-uppercase text-center my-4">Task Manager</h1>
-        <h1 className="row">
+      <main className="content p-3 mb-2 bg-info">
+        <h1 className="text-white text-uppercase text-center my-4">Task Manager</h1>
+        <div className="row">
           <div className="col-md-6 col-sma-10 mx-auto p-0">
             <div className="card p-3">
               <div>
@@ -89,12 +118,14 @@ class App extends Component {
               </ul>
             </div>
           </div>
-        </h1>
+        </div>
+        <footer className='my-3 mb-2 bg-info text-white text-center'>Copyright 2024 &copy; All Rights Reserved</footer>
+        {this.state.modal ? (
+          <Modal activeItem={this.state.activeItem} toggle={this.toggle} onSave={this.handleSubmit} />
+        ): null}
       </main>
     )
   }
-
-
  
 }
 
