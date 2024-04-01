@@ -1,36 +1,34 @@
 import React, { Component } from 'react'
 import './App.css';
 import Modal from './components/Modal'
-
-const tasks = [
-  {id: 1,
-  title: "task 1",
-  description: "this is task 1",
-  completed: false
-  },
-  {
-    id:2,
-    title: "task 2",
-    description: "this is task 2",
-    completed:true
-  }
-]
-
+import axios from 'axios';
+ 
 class App extends Component {
   constructor(props){
     super(props);
     this.state= {
       modal:false,
       viewCompleted:false,
-      taskList: tasks,
       activeItem: {
         title: "",
         description: "",
         completed: false
       },
-      taskList: tasks,
+      todoList: []
     };
   }
+
+componentDidMount(){
+  this.refreshList();
+}
+
+refreshList = () => {
+  axios
+    .get("http://localhost:8000/api/tasks/")
+    .then(res => this.state({todoList: res.data}))
+    .catch(err => console.log(err))
+};
+
 
   //toggle property
   toggle = () => {
@@ -38,10 +36,20 @@ class App extends Component {
   };
   handleSubmit = item => {
     this.toggle();
-    alert("saved!" + JSON.stringify(item));
+    if (item.id){
+      axios
+        .put(`http://localhost:8000/api/tasks/${item.id}/`, item)
+        .then(res => this.refreshList())
+    }
+    axios
+      .post("http://localhost:8000/api/tasks/", item)
+      .then(res => this.refreshList())
   };
+
   handleDelete = item => {
-    alert("deleted!" + JSON.stringify(item));
+    axios
+      .delete(`http://localhost:8000/api/tasks/${item.id}/`)
+      .then(res => this.refreshList())
   };
 
   createItem = () => {
@@ -82,8 +90,8 @@ class App extends Component {
   // Rendering all items in list
   renderItems = () => {
     const { viewCompleted } = this.state;
-    const newItems = this.state.taskList.filter(
-      item => item.completed == viewCompleted
+    const newItems = this.state.todoList.filter(
+      item => item.completed === viewCompleted
     );
   
 

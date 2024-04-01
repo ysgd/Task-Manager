@@ -36,7 +36,7 @@ class CustomModal extends Component{
       <Modal isOpen={true} toggle={toggle}>
         <ModalHeader toggle={toggle}>Task Item</ModalHeader>
         <ModalBody>
-          <form>
+          <Form>
             <FormGroup>
               <Label for="title">Title</Label>
               <Input
@@ -73,7 +73,7 @@ class CustomModal extends Component{
               Completed
            </Label>   
           </FormGroup>
-          </form>
+          </Form>
         </ModalBody>
         <ModalFooter>
           <Button color="success" onClick={() => onSave(this.state.activeItem)}>
