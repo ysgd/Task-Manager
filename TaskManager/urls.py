@@ -5,7 +5,7 @@ from todo import views
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'tasks', views.TodoView, 'task')
+router.register(r'tasks', views.TodoView, 'tasks')
 
 
 urlpatterns = [
